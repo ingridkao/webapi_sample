@@ -14,7 +14,8 @@
       <div class="pagination">
         <button 
           v-for="page in total_pages" 
-          :key="page" 
+          :key="page"
+          :class="{active: page === params.page}"
           @click="selectPage(page)"
         >
           {{page}}
@@ -104,6 +105,9 @@ export default {
     margin: 3px;
     &:hover{
       background: #ddd;
+    }
+    &.active{
+      background: #999;
     }
   }
 }
