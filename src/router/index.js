@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ReqresView from '../views/ReqresView.vue'
 import BikeListView from '../views/BikeListView.vue'
+import BikeListAsyncView from '../views/BikeListAsyncView.vue'
 
 export const routes = [
   {
@@ -21,8 +22,13 @@ export const routes = [
   },
   {
     path: '/bike1',
-    name: 'TDX Bike list',
+    name: 'TDX-Bike',
     component: BikeListView
+  },
+  {
+    path: '/bike2',
+    name: 'TDX-Bike:Async寫法',
+    component: BikeListAsyncView
   }
 ]
 
