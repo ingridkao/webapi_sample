@@ -51,6 +51,14 @@ const CITY_OPTION = [
   "Tainan",
   "Chiayi"
 ]
+const blackIcon = new L.Icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
 export default {
   data(){
     return {
@@ -68,7 +76,8 @@ export default {
         center: [25.056, 121.50],
         url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }  
+      },
+      marker: null
     }
   },
   components: {
@@ -83,6 +92,10 @@ export default {
   mounted(){
     //僅能在mounted中執行，原因是要確認容器已在HTML中被渲染出來
     this.initMap()
+  },
+  onBeforeUnmount() {
+    //讓效能更好，離開此頁面Leaflet移除
+    if (this.map) this.map.remove()
   },
   methods: {
     getAuthorizationHeader(){
@@ -115,6 +128,8 @@ export default {
 
         //Get Data positoin
         this.updateMapCenter()
+        this.updateMapMarker()
+
       }).catch((err) => {
         this.axioError = true
       })
@@ -134,6 +149,17 @@ export default {
       if(!(PositionLon && PositionLat)) return
       this.mapConfig.center = [PositionLat, PositionLon]
       this.map.setView(this.mapConfig.center, this.mapConfig.zoom)
+    },
+    updateMapMarker(){
+      //如果沒有資料就不新增了
+      if(this.marker){
+        this.map.removeLayer(this.marker)
+      }
+      if(this.axioAllData.length === 0)return
+      this.axioAllData.map((item) => {
+        const {PositionLat, PositionLon} = item.StationPosition
+        this.marker = new L.marker([PositionLat, PositionLon],{ icon: blackIcon }).addTo(this.map)
+      })
     }
   }
 }
