@@ -21,6 +21,11 @@
         :XMLHttpError="fetchError"
         :userAllData="fetchAllData"
       />
+      <h6>3. Axios: 引入函式庫</h6>
+      <RegresAllUser 
+        :XMLHttpError="axioError"
+        :userAllData="axioAllData"
+      />
     </div>
   </div>
 </template>
@@ -28,7 +33,7 @@
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
 import RegresAllUser from '@/components/RegresAllUser.vue'
-
+import axios from 'axios'
 export default {
   data(){
     return {
@@ -36,6 +41,8 @@ export default {
       userAllData: [],
       fetchError: false,
       fetchAllData: [],
+      axioError: false,
+      axioAllData: []
     }
   },
   components: {
@@ -47,8 +54,9 @@ export default {
     // 當網速慢或是專案目錄過大的時候，放在created或mounted會有差異
   },
   mounted(){
-    this.XMLHttpRequestFunc()
-    this.FetchAPIFunc()
+    // this.XMLHttpRequestFunc()
+    // this.FetchAPIFunc()
+    this.AxiosFunc()
   },
   methods: {
     XMLHttpRequestFunc(){
@@ -78,7 +86,16 @@ export default {
       }).catch((err) => {
         this.fetchError = true
       })
-    }
+    },
+    AxiosFunc(){
+      axios.get('https://reqres.in/api/users').then((response) => {
+        console.log(response.data);
+        this.axioError = (response.status !== 200)
+        this.axioAllData = response.data.data
+      }).catch((err) => {
+        this.axioError = true
+      })
+    } 
   }
 }
 </script>
