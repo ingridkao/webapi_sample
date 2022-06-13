@@ -12,7 +12,13 @@
         :userAllData="axioAllData"
       />
       <div class="pagination">
-        {{total_pages}}
+        <button 
+          v-for="page in total_pages" 
+          :key="page" 
+          @click="selectPage(page)"
+        >
+          {{page}}
+        </button>
       </div>
       <hr>
       <h6>Get traget user: response是物件{}</h6>
@@ -82,7 +88,23 @@ export default {
       }).catch((err) => {
         this.axioTargetError = true
       })
+    },
+    selectPage(page){
+      this.params.page = page
+      this.AxiosFunc()
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.pagination{
+  button{
+    cursor: pointer;
+    margin: 3px;
+    &:hover{
+      background: #ddd;
+    }
+  }
+}
+</style>
