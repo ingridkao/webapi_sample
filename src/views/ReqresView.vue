@@ -5,11 +5,18 @@
         msg="使用Reqres來試試看Get target user"
         link="https://reqres.in/"
       />
-      <h6>Get all user</h6>
+      <h6>Get all user: response是陣列[]</h6>
       <RegresAllUser 
         :XMLHttpError="axioError"
         :userAllData="axioAllData"
       />
+      <h6>Get traget user: response是物件{}</h6>
+      <div v-if="axioTargetError">
+        Error
+      </div>
+      <div v-else>
+        {{axioTargetData? axioTargetData: 'No Users'}}
+      </div>
     </div>
   </div>
 </template>
@@ -22,7 +29,9 @@ export default {
   data(){
     return {
       axioError: false,
-      axioAllData: []
+      axioAllData: [],
+      axioTargetError: false,
+      axioTargetData: {}
     }
   },
   components: {
@@ -31,6 +40,7 @@ export default {
   },
   mounted(){
     this.AxiosFunc()
+    this.AxiosTargetFunc()
   },
   methods: {
     AxiosFunc(){
@@ -39,6 +49,14 @@ export default {
         this.axioAllData = response.data.data
       }).catch((err) => {
         this.axioError = true
+      })
+    },
+    AxiosTargetFunc(){
+      axios.get('https://reqres.in/api/users/2').then((response) => {
+        this.axioTargetError = (response.status !== 200)
+        this.axioTargetData = response.data.data
+      }).catch((err) => {
+        this.axioTargetError = true
       })
     } 
   }
