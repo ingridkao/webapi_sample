@@ -22,6 +22,7 @@
         :error="axioError"
         :allData="axioAllData"
       />
+      <div id="mapContainer" class="mapaBox"></div>
     </div>
   </div>
 </template>
@@ -30,6 +31,8 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 import RegresAllBike from '@/components/RegresAllBike.vue'
 import axios from 'axios'
+import L from "leaflet"
+import "leaflet/dist/leaflet.css"
 
 const API_URL = 'https://tdx.transportdata.tw/api/basic/'
 const CITY_OPTION = [
@@ -55,7 +58,14 @@ export default {
       params:{
         '$format' : 'JSON'
       },
-      accesstoken: ''
+      accesstoken: '',
+      map: null,
+      mapConfig: {
+        zoom: 14,
+        center: [25.056, 121.50],
+        url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }  
     }
   },
   components: {
@@ -104,11 +114,20 @@ export default {
       })
     },
     initMap(){
+      //指定DIV#mapContainer為Leaglet要渲染的容器，並指定中心座標位置和zoom level
+      this.map = L.map("mapContainer").setView(this.mapConfig.center, this.mapConfig.zoom)
+      // 將tileLayer夾在地圖上
+      L.tileLayer(this.mapConfig.url, {
+        attribution: this.mapConfig.attribution
+      }).addTo(this.map)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.mapaBox{
+  width: 100%;
+  height: 300px;
+}
 </style>
