@@ -12,6 +12,15 @@
         :XMLHttpError="XMLHttpError"
         :userAllData="userAllData"
       />
+      <h6>2. Fetch API: 使用ES6的Promise物件做回傳的處理，不需引入任何函式庫</h6>
+      <ul>
+        <li>可以搭配 async/await</li>
+        <li>缺點：舊瀏覽器如IE不支援</li>
+      </ul>
+      <RegresAllUser 
+        :XMLHttpError="fetchError"
+        :userAllData="fetchAllData"
+      />
     </div>
   </div>
 </template>
@@ -24,7 +33,9 @@ export default {
   data(){
     return {
       XMLHttpError: false,
-      userAllData: []
+      userAllData: [],
+      fetchError: false,
+      fetchAllData: [],
     }
   },
   components: {
@@ -37,26 +48,36 @@ export default {
   },
   mounted(){
     this.XMLHttpRequestFunc()
+    this.FetchAPIFunc()
   },
   methods: {
     XMLHttpRequestFunc(){
       const xhr = new XMLHttpRequest()
-
-      // 初始化一個請求: (method, url, 同步｜非同步）
+      // 請求: (method, url,                          同步｜非同步）
       xhr.open('GET', 'https://reqres.in/api/users', true)
       xhr.send()
 
-      // 要用"箭頭函式"，用下面的寫法作用域裡面的this不是Vue
+      // 錯誤寫法:function作用域裡面的this不是Vue
       // xhr.onload = function(){}
       xhr.onload = () => { 
         const useData = JSON.parse(xhr.response)
-        // console.log(useData);
         this.userAllData = useData.data
       }
-      xhr.onerror = function (err) {
+      xhr.onerror = (err) => {
         this.XMLHttpError = true
-        // console.log('錯誤:', err)
       }
+    },
+    FetchAPIFunc(){
+      fetch('https://reqres.in/api/users').then((response) => {
+        this.fetchError = (response.status !== 200)
+        //json(): 返回 Promise，resolves 是 JSON 物件
+        return response.json()
+      }).then(responseText => {
+        const useData = responseText
+        this.fetchAllData = useData.data
+      }).catch((err) => {
+        this.fetchError = true
+      })
     }
   }
 }
