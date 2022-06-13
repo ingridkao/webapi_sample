@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ReqresView from '../views/ReqresView.vue'
 import BikeListView from '../views/BikeListView.vue'
 import BikeListAsyncView from '../views/BikeListAsyncView.vue'
+import BikeMapView from '../views/BikeMapView.vue'
 
 export const routes = [
   {
@@ -29,7 +30,12 @@ export const routes = [
     path: '/bike2',
     name: 'TDX-Bike:Async寫法',
     component: BikeListAsyncView
-  }
+  },
+  {
+    path: '/bikeMap',
+    name: 'TDX-BikeMap',
+    component: BikeMapView
+  },
 ]
 
 const router = createRouter({

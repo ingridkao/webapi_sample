@@ -17,7 +17,7 @@ npm run serve
 2. 用fetch API
 3. 用axios
     1. 安裝：`npm install axios`
-    2. 匯入：`import axios from 'axios'`
+    2. 匯入：`import axios from "axios"`
 
 
 ## Reqres
@@ -35,3 +35,8 @@ npm run serve
 1. 閱讀API文件-swagger
 2. 確認API的必填項目
 3. 可以選取城市
+4. 可以渲染成地圖，用Leaflet來實作
+    1. 安裝：`npm install leaflet`
+    2. 匯入：`import L from "leaflet"`
+    3. 匯入：`import "leaflet/dist/leaflet.css"`
+`
