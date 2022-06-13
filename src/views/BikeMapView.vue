@@ -160,7 +160,7 @@ export default {
       //確認有沒有經緯度
       if(!(PositionLon && PositionLat)) return
       this.mapConfig.center = [PositionLat, PositionLon]
-      this.map.setView(this.mapConfig.center, 13.5)
+      this.map.setView(this.mapConfig.center, 13)
     },
     pantoTrigger(item){
       //item有接到子層的東西嗎？

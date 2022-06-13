@@ -5,6 +5,8 @@ import BikeListView from '../views/BikeListView.vue'
 import BikeListAsyncView from '../views/BikeListAsyncView.vue'
 import BikeMapView from '../views/BikeMapView.vue'
 
+import WeatherView from '../views/WeatherView.vue'
+
 export const routes = [
   {
     path: '/',
@@ -36,6 +38,11 @@ export const routes = [
     name: 'TDX-BikeMap',
     component: BikeMapView
   },
+  {
+    path: '/weather',
+    name: 'Weather',
+    component: WeatherView
+  }
 ]
 
 const router = createRouter({
