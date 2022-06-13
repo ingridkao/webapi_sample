@@ -15,12 +15,14 @@
       </div>
     </div>
     <div class="bikeContainer">
-      <div class="listBox">
+      <div class="listBox" :class="{loadBox: load}">
         <label for="city">欲查詢縣市</label>
-        <select name="city" id="city" v-model="city" @change="fetchData">
+        <select name="city" id="city" v-model="city" @change="updateData">
           <option v-for="item in cityOption" :value="item" :key="item">{{item}}</option>
         </select>
+        <div v-if="load" class="verticalMiddle">Loading</div>
         <RegresAllBike 
+          v-else
           :error="axioError"
           :allData="axioAllData"
           @trigger="pantoTrigger"
@@ -63,6 +65,7 @@ const blackIcon = new L.Icon({
 export default {
   data(){
     return {
+      load: false,
       axioError: false,
       axioAllData: [],
       cityOption: CITY_OPTION,
@@ -73,7 +76,6 @@ export default {
       accesstoken: '',
       map: null,
       mapConfig: {
-        zoom: 13.5,
         center: [25.056, 121.50],
         url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -117,6 +119,7 @@ export default {
       })
     },
     fetchData(){
+      this.load = true
       this.axioAllData = []
       axios.get(`${API_URL}v2/Bike/Station/${this.city}`, {
         headers: {
@@ -133,11 +136,19 @@ export default {
 
       }).catch((err) => {
         this.axioError = true
+      }).finally(()=>{
+        this.load = false
       })
+    },
+    updateData(){
+      if(this.marker){
+        this.map.removeLayer(this.marker)
+      }
+      this.fetchData()
     },
     initMap(){
       //指定DIV#mapContainer為Leaglet要渲染的容器，並指定中心座標位置和zoom level
-      this.map = L.map("mapContainer").setView(this.mapConfig.center, this.mapConfig.zoom)
+      this.map = L.map("mapContainer").setView(this.mapConfig.center,8)
       // 將tileLayer夾在地圖上
       L.tileLayer(this.mapConfig.url, {
         attribution: this.mapConfig.attribution
@@ -149,19 +160,16 @@ export default {
       //確認有沒有經緯度
       if(!(PositionLon && PositionLat)) return
       this.mapConfig.center = [PositionLat, PositionLon]
-      this.map.setView(this.mapConfig.center, this.mapConfig.zoom)
+      this.map.setView(this.mapConfig.center, 13.5)
     },
     pantoTrigger(item){
       //item有接到子層的東西嗎？
       if(!(item && item.length === 2))return
       this.mapConfig.center = item
-      this.map.setView(this.mapConfig.center, this.mapConfig.zoom)
+      this.map.setView(this.mapConfig.center, 16, {animate: true, duration: 25})
     },
     updateMapMarker(){
       //如果沒有資料就不新增了
-      if(this.marker){
-        this.map.removeLayer(this.marker)
-      }
       if(this.axioAllData.length === 0)return
       this.axioAllData.map((item) => {
         const {PositionLat, PositionLon} = item.StationPosition
@@ -183,14 +191,24 @@ export default {
   .listBox{
     flex: 1 1 26rem;
     .dataBox {
+      height: calc(100% - 2rem);
       max-height: calc(100% - 2rem);
       overflow: scroll;
+    }
+    &.loadBox .dataBox{
+      background-color: #fff;
     }
   }
   .mapBox{
     flex: 1 1 auto;
     width: 100%;
     height: 100%;
+  }
+  .verticalMiddle{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
