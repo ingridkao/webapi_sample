@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ReqresView from '../views/ReqresView.vue'
+import BikeListView from '../views/BikeListView.vue'
 
 export const routes = [
   {
@@ -18,6 +19,11 @@ export const routes = [
     name: 'Reqres',
     component: ReqresView
   },
+  {
+    path: '/bike1',
+    name: 'TDX Bike list',
+    component: BikeListView
+  }
 ]
 
 const router = createRouter({
