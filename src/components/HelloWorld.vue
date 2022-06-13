@@ -1,6 +1,8 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <a :href="link" target="_blank" rel="noreferrer noopenner">
+      {{ msg }}
+    </a>
   </div>
 </template>
 
@@ -8,7 +10,8 @@
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+    link: String
   }
 }
 </script>

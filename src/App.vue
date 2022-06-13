@@ -9,10 +9,12 @@
       {{iten.name}}
     </router-link>
   </nav>
-  <router-view/>
+  <router-view class="routerView"/>
 </template>
 
 <script>
+// import {routes} from '@/router/index.js'
+
 export default {
   data(){
     return {
@@ -33,13 +35,15 @@ export default {
   color: #2c3e50;
 }
 
+a {
+  line-height: 1.8;
+  color: #2c3e50;
+}
+
 nav {
   padding: 30px;
-
-  a {
+  a{
     font-weight: bold;
-    color: #2c3e50;
-
     &.router-link-exact-active {
       color: #42b983;
     }
@@ -51,5 +55,11 @@ nav {
       display: none;
     }
   }
+}
+
+.routerView{
+  margin: 0px 30px;
+  padding: 15px;
+  background-color: #efefef;
 }
 </style>
