@@ -11,9 +11,10 @@
         :XMLHttpError="axioError"
         :userAllData="axioAllData"
       />
+      <hr>
       <h6>Get traget user: response是物件{}</h6>
       <label for="search">Search ID</label>
-      <input type="text" id="search" v-model="search" @keyup="searchUser">
+      <input type="text" id="search" v-model="search" @keyup="AxiosTargetFunc">
       <RegresTargetUser 
         :error="axioTargetError"
         :targetData="axioTargetData"
@@ -27,6 +28,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import RegresAllUser from '@/components/RegresAllUser.vue'
 import RegresTargetUser from '@/components/RegresTargetUser.vue'
 import axios from 'axios'
+const API_URL = 'https://reqres.in/api/users'
 export default {
   data(){
     return {
@@ -34,7 +36,10 @@ export default {
       axioAllData: [],
       axioTargetError: false,
       axioTargetData: {},
-      search: ''
+      search: '',
+      params:{
+        page: 2
+      }
     }
   },
   components: {
@@ -48,7 +53,13 @@ export default {
   },
   methods: {
     AxiosFunc(){
-      axios.get('https://reqres.in/api/users').then((response) => {
+      //將qurey string｜參數帶進去的方式：
+      //1. 直接待在網址
+      // axios.get('https://reqres.in/api/users?page=1').then((response) => {
+      //2. 待在config中，方便控制
+      axios.get(API_URL, {
+        params: this.params
+      }).then((response) => {
         this.axioError = (response.status !== 200)
         this.axioAllData = response.data.data
       }).catch((err) => {
@@ -59,15 +70,12 @@ export default {
       //增加判斷
       this.axioTargetData = {}
       if(this.search === "")return
-      axios.get(`https://reqres.in/api/users/${this.search}`).then((response) => {
+      axios.get(`${API_URL}/${this.search}`).then((response) => {
         this.axioTargetError = (response.status !== 200)
         this.axioTargetData = response.data.data
       }).catch((err) => {
         this.axioTargetError = true
       })
-    },
-    searchUser(){
-      this.AxiosTargetFunc()
     }
   }
 }
