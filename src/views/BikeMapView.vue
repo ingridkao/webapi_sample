@@ -13,16 +13,19 @@
           <div style="border: 1px solid #555;margin: 5px;">底圖：tileLayer，如果不特別處理通常是最底層，如googlemap or osm map</div>
         </div>
       </div>
-      <hr>
-      <label for="city">欲查詢縣市</label>
-      <select name="city" id="city" v-model="city" @change="fetchData">
-        <option v-for="item in cityOption" :value="item" :key="item">{{item}}</option>
-      </select>
-      <RegresAllBike 
-        :error="axioError"
-        :allData="axioAllData"
-      />
-      <div id="mapContainer" class="mapaBox"></div>
+    </div>
+    <div class="bikeContainer">
+      <div class="listBox">
+        <label for="city">欲查詢縣市</label>
+        <select name="city" id="city" v-model="city" @change="fetchData">
+          <option v-for="item in cityOption" :value="item" :key="item">{{item}}</option>
+        </select>
+        <RegresAllBike 
+          :error="axioError"
+          :allData="axioAllData"
+        />
+      </div>
+      <div id="mapContainer" class="mapBox"></div>
     </div>
   </div>
 </template>
@@ -61,7 +64,7 @@ export default {
       accesstoken: '',
       map: null,
       mapConfig: {
-        zoom: 14,
+        zoom: 13.5,
         center: [25.056, 121.50],
         url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -109,6 +112,9 @@ export default {
       }).then((response) => {
         this.axioError = (response.status !== 200)
         this.axioAllData = response.data
+
+        //Get Data positoin
+        this.updateMapCenter()
       }).catch((err) => {
         this.axioError = true
       })
@@ -120,14 +126,36 @@ export default {
       L.tileLayer(this.mapConfig.url, {
         attribution: this.mapConfig.attribution
       }).addTo(this.map)
+    },
+    updateMapCenter(){
+      if(!(this.axioAllData[0] && this.axioAllData[0]['StationPosition']))return
+      const {PositionLon, PositionLat} = this.axioAllData[0]['StationPosition']
+      //確認有沒有經緯度
+      if(!(PositionLon && PositionLat)) return
+      this.mapConfig.center = [PositionLat, PositionLon]
+      this.map.setView(this.mapConfig.center, this.mapConfig.zoom)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.mapaBox{
+<style lang="scss">
+.bikeContainer{
+  display: inline-flex;
+  height: calc(100vh - 20rem);
   width: 100%;
-  height: 300px;
+  margin: 1rem 0;
+  .listBox{
+    flex: 1 1 26rem;
+    .dataBox {
+      max-height: calc(100% - 2rem);
+      overflow: scroll;
+    }
+  }
+  .mapBox{
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

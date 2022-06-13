@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <div v-if="XMLHttpError">
-      Error
-    </div>
-    <div v-else-if="allData.length === 0">
-      No Data
-    </div>
-    <div v-else class="dataBox">
-      <div v-for="item in allData" :key="item.StationID">
-        {{item.StationUID}} | {{item.StationName.Zh_tw}}
-      </div>
+  <div v-if="XMLHttpError">
+    Error
+  </div>
+  <div v-else-if="allData.length === 0">
+    No Data
+  </div>
+  <div v-else class="dataBox">
+    <div v-for="item in allData" :key="item.StationID"
+      @click="triggerMap(item)"  
+    >
+      {{item.StationName.Zh_tw}}
     </div>
   </div>
 </template>
@@ -19,13 +19,11 @@ export default {
   props: {
     error: Boolean,
     allData: Array
+  },
+  methods:{
+    triggerMap(){
+
+    }
   }
 }
 </script>
-
-<style scoped lang="scss">
-.dataBox {
-  max-height: 100px;
-  overflow: scroll;
-}
-</style>
