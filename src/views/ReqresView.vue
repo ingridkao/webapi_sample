@@ -11,6 +11,9 @@
         :XMLHttpError="axioError"
         :userAllData="axioAllData"
       />
+      <div class="pagination">
+        {{total_pages}}
+      </div>
       <hr>
       <h6>Get traget user: response是物件{}</h6>
       <label for="search">Search ID</label>
@@ -38,8 +41,10 @@ export default {
       axioTargetData: {},
       search: '',
       params:{
-        page: 2
-      }
+        page: 1,
+        per_page: 3
+      },
+      total_pages: 0
     }
   },
   components: {
@@ -61,6 +66,7 @@ export default {
         params: this.params
       }).then((response) => {
         this.axioError = (response.status !== 200)
+        this.total_pages = response.data.total_pages
         this.axioAllData = response.data.data
       }).catch((err) => {
         this.axioError = true
