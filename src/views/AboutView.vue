@@ -89,7 +89,6 @@ export default {
     },
     AxiosFunc(){
       axios.get('https://reqres.in/api/users').then((response) => {
-        console.log(response.data);
         this.axioError = (response.status !== 200)
         this.axioAllData = response.data.data
       }).catch((err) => {
