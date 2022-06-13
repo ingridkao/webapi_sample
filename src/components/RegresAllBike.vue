@@ -7,14 +7,9 @@
       No Data
     </div>
     <div v-else class="dataBox">
-      {{allData}}
-      <!-- <div v-for="item in allData" :key="item.id">
-        <b>{{`${item.first_name} ${item.last_name}`}}</b>
-        <div class="imgBox">
-          <img :src="item.avatar" :alt="`${item.first_name} ${item.last_name}`">
-        </div>
-        <p>{{item.email}}</p>
-      </div> -->
+      <div v-for="item in allData" :key="item.StationID">
+        {{item.StationUID}} | {{item.StationName.Zh_tw}}
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +25,7 @@ export default {
 
 <style scoped lang="scss">
 .dataBox {
-  min-height: 25vh;
+  max-height: 100px;
+  overflow: scroll;
 }
 </style>

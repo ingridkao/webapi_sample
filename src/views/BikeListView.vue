@@ -17,6 +17,10 @@
         </ul>
       </div>
       <h6>Get bike station List</h6>
+      <p>欲查詢縣市</p>
+      <select name="city" id="city" v-model="city" @change="AxiosFunc">
+        <option v-for="item in cityOption" :value="item" :key="item">{{item}}</option>
+      </select>
       <RegresAllBike 
         :error="axioError"
         :allData="axioAllData"
@@ -30,18 +34,31 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import RegresAllBike from '@/components/RegresAllBike.vue'
 import axios from 'axios'
 const API_URL = 'https://tdx.transportdata.tw/api/basic/'
+const CITY_OPTION = [
+  "Taichung",
+  "Hsinchu",
+  "MiaoliCounty",
+  "NewTaipei",
+  "PingtungCounty",
+  "KinmenCounty",
+  "Taoyuan",
+  "Taipei",
+  "Kaohsiung",
+  "Tainan",
+  "Chiayi"
+]
 export default {
   data(){
     return {
       axioError: false,
       axioAllData: [],
       city: 'Taoyuan',
+      cityOption: CITY_OPTION,
       params:{
         //*指定來源格式
-        '$format' : 'JSON',
-        //取前幾筆
-        // '$top': 100
-      }
+        '$format' : 'JSON'
+      },
+      accesstoken: ''
     }
   },
   components: {
@@ -49,9 +66,8 @@ export default {
     RegresAllBike
   },
   mounted(){
-    this.getAuthorizationHeader().then((accesstoken)=>{
-      if(!accesstoken) return
-      this.AxiosFunc(accesstoken)
+    this.getAuthorizationHeader().then(()=>{
+      this.AxiosFunc()
     })
   },
   methods: {
@@ -72,17 +88,17 @@ export default {
         data: parameter
       }).then((response) => {
         //把response.data 丟給 Line69，再透過70行return到55行
-        return response.data
+        this.accesstoken = response.data
       }).catch((err) => {
         return err
       })
     },
-    AxiosFunc(accesstoken){
+    AxiosFunc(){
       this.axioAllData = []
       //取得指定[縣市]的公共自行車租借站位資料
       axios.get(`${API_URL}v2/Bike/Station/${this.city}`, {
         headers: {
-          authorization: `Bearer ${accesstoken.access_token}`,
+          authorization: `Bearer ${this.accesstoken.access_token}`,
         },
         params: this.params
       }).then((response) => {
