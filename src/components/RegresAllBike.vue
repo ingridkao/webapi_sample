@@ -21,8 +21,12 @@ export default {
     allData: Array
   },
   methods:{
-    triggerMap(){
-
+    triggerMap(item){
+      console.log('組件傳資料給父層');
+      const {PositionLat, PositionLon} = item.StationPosition
+      //$emit第一個參數：指定名稱，和寫在父層的@trigger名字一樣
+      //$emit第二個參數：要傳給父層的東西
+      this.$emit('trigger', [PositionLat, PositionLon])
     }
   }
 }

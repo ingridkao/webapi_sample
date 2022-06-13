@@ -23,6 +23,7 @@
         <RegresAllBike 
           :error="axioError"
           :allData="axioAllData"
+          @trigger="pantoTrigger"
         />
       </div>
       <div id="mapContainer" class="mapBox"></div>
@@ -150,6 +151,12 @@ export default {
       this.mapConfig.center = [PositionLat, PositionLon]
       this.map.setView(this.mapConfig.center, this.mapConfig.zoom)
     },
+    pantoTrigger(item){
+      //item有接到子層的東西嗎？
+      if(!(item && item.length === 2))return
+      this.mapConfig.center = item
+      this.map.setView(this.mapConfig.center, this.mapConfig.zoom)
+    },
     updateMapMarker(){
       //如果沒有資料就不新增了
       if(this.marker){
@@ -158,7 +165,9 @@ export default {
       if(this.axioAllData.length === 0)return
       this.axioAllData.map((item) => {
         const {PositionLat, PositionLon} = item.StationPosition
-        this.marker = new L.marker([PositionLat, PositionLon],{ icon: blackIcon }).addTo(this.map)
+        this.marker = new L.marker([PositionLat, PositionLon],{ icon: blackIcon }).addTo(this.map)          .bindPopup(`
+          ${item.StationName.Zh_tw}
+        `)
       })
     }
   }

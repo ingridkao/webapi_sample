@@ -40,3 +40,6 @@ npm run serve
     2. 匯入：`import L from "leaflet"`
     3. 匯入：`import "leaflet/dist/leaflet.css"`
 `
+5. 選取城市後，地圖也會改變中心點
+6. 加入腳踏車marker
+7. 點擊左方列表，右方地圖會到那個位置
