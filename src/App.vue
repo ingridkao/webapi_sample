@@ -1,17 +1,35 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <!-- 方便後續新增 -->
+    <router-link 
+      v-for="(iten, index) in routers" 
+      :key="index" 
+      :to="iten.path"
+    >
+      {{iten.name}}
+    </router-link>
   </nav>
   <router-view/>
 </template>
+
+<script>
+export default {
+  data(){
+    return {
+      routers: [
+        {path: "/", name: "Home"},
+        {path: "/about", name: "About"}
+      ]
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
@@ -24,6 +42,13 @@ nav {
 
     &.router-link-exact-active {
       color: #42b983;
+    }
+    &:after{
+      content: '|';
+      padding: .5rem;
+    }
+    &:last-child:after{
+      display: none;
     }
   }
 }
