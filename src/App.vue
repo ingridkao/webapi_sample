@@ -13,15 +13,11 @@
 </template>
 
 <script>
-// import {routes} from '@/router/index.js'
-
+import {routes} from '@/router/index.js'
 export default {
   data(){
     return {
-      routers: [
-        {path: "/", name: "Home"},
-        {path: "/about", name: "About"}
-      ]
+      routers: routes
     }
   }
 }
