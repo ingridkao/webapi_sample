@@ -8,18 +8,17 @@
       <h6>
         1. XMLHttpRequest: JavaScript的原生物件，不需引入任何函式庫
       </h6>
-      <div v-if="XMLHttpError">
-        Error
-      </div>
-      <div v-else>
-        {{userAllData.length > 0 ? userAllData: 'No Users'}}
-      </div>
+      <RegresAllUser 
+        :XMLHttpError="XMLHttpError"
+        :userAllData="userAllData"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
+import RegresAllUser from '@/components/RegresAllUser.vue'
 
 export default {
   data(){
@@ -29,12 +28,12 @@ export default {
     }
   },
   components: {
-    HelloWorld
+    HelloWorld,
+    RegresAllUser
   },
   created(){
     // created -> el掛載完成，整個view已被渲染完成 -> mounted
     // 當網速慢或是專案目錄過大的時候，放在created或mounted會有差異
-    // console.log('created');
   },
   mounted(){
     this.XMLHttpRequestFunc()
@@ -51,12 +50,12 @@ export default {
       // xhr.onload = function(){}
       xhr.onload = () => { 
         const useData = JSON.parse(xhr.response)
-        console.log(useData);
+        // console.log(useData);
         this.userAllData = useData.data
       }
       xhr.onerror = function (err) {
         this.XMLHttpError = true
-        console.log('錯誤:', err)
+        // console.log('錯誤:', err)
       }
     }
   }
