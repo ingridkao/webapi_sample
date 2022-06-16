@@ -1,17 +1,19 @@
 <template>
   <HelloWorld 
-    msg="使用氣象資料開放平臺取得觀測資料-一般天氣預報-今明 36 小時天氣預報"
-    link="https://opendata.cwb.gov.tw/dataset/observation/O-A0003-001"
+    msg="參考codepan範例，實作出氣象地圖"
+    link="https://codepen.io/caocharles/pen/oNYZZEo"
   />
-  <Weather 
+  <TaiwanWeather/>
+  <!-- <Weather 
     :error="axioError"
     :allData="axioAllData"
-  />
+  /> -->
 </template>
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
 import Weather from '@/components/Weather.vue'
+import TaiwanWeather from '@/components/TaiwanWeather.vue'
 import axios from 'axios'
 //※ URL：https://opendata.cwb.gov.tw/api/v1/rest/datastore/{dataid}?Authorization={apikey}&format={format}
 const API_URL = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/'
@@ -29,7 +31,8 @@ export default {
   },
   components: {
     HelloWorld,
-    Weather
+    Weather,
+    TaiwanWeather
   },
   mounted(){
     this.AxiosFunc()

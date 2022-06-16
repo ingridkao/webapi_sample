@@ -6,6 +6,7 @@ import BikeListAsyncView from '../views/BikeListAsyncView.vue'
 import BikeMapView from '../views/BikeMapView.vue'
 
 import WeatherView from '../views/WeatherView.vue'
+import WeatherImageView from '../views/WeatherImageView.vue'
 
 export const routes = [
   {
@@ -42,6 +43,11 @@ export const routes = [
     path: '/weather',
     name: 'Weather',
     component: WeatherView
+  },
+  {
+    path: '/weatherImage',
+    name: 'WeatherImage',
+    component: WeatherImageView
   }
 ]
 

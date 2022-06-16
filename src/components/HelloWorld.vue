@@ -1,9 +1,7 @@
 <template>
-  <div class="hello">
-    <a :href="link" target="_blank" rel="noreferrer noopenner">
-      {{ msg }}
-    </a>
-  </div>
+  <a :href="link" target="_blank" rel="noreferrer noopenner">
+    {{ msg }}
+  </a>
 </template>
 
 <script>
@@ -15,6 +13,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-</style>
