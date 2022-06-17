@@ -36,9 +36,9 @@ npm run serve
 2. 確認API的必填項目
 3. 可以選取城市
 4. 可以渲染成地圖，用Leaflet來實作
-    1. 安裝：`npm install leaflet`
-    2. 匯入：`import L from "leaflet"`
-    3. 匯入：`import "leaflet/dist/leaflet.css"`
+    a. 安裝：`npm install leaflet`
+    b. 匯入：`import L from "leaflet"`
+    c. 匯入：`import "leaflet/dist/leaflet.css"`
 `
 5. 選取城市後，地圖也會改變中心點
 6. 加入腳踏車marker
@@ -54,3 +54,14 @@ npm run serve
 1. 使用氣象資料開放平臺API獲得一般天氣預報-今明 36 小時天氣預報
 2. 放置台灣SVG地圖
 3. 點擊縣市可以知道是哪一個
+
+資料與組件關係
+| Views            | components       | Featrue                           |
+| ---------------- | ---------------- | --------------------------------- |
+| WeatherView.vue  |                  | AxiosFunc: 取得觀測資料             |
+|                  | HelloWorld.vue   | Link: 放開放平台連結                |
+|                  | TaiwanWeather.vue| targetLocation & Click event & SVG|
+
+
+4. 將**點擊結果targetLocation**放到父層WeatherView，方便組件之間溝通
+5. 下一步再把Weather(觀測列表)放入WeatherView
