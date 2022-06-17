@@ -64,4 +64,7 @@ npm run serve
 
 
 4. 將**點擊結果targetLocation**放到父層WeatherView，方便組件之間溝通
-5. 下一步再把Weather(觀測列表)放入WeatherView
+    a. 可以將上一個頁面的Weather(觀測列表)放入WeatherView確認API串接方式
+    b. 將API response的資料透過Array.find的function找到點擊的該縣市資料
+    c. 將該縣市資料放在DIV#forecast中
+

@@ -6,20 +6,28 @@
   
   <div id="taiwanMapBox">
     <div class="title_area">
-      <h1>Taiwan<span>///</span><br>Weather Map<br></h1>
-      <div class="forecast" v-if="targetLocation">
-        {{targetLocation}}
-        <!-- <h5>{{now_area.place}}</h5>
-        <h4>{{now_area.low}} ~ {{now_area.high}}</h4>
-        <h2>{{now_area.weather}}</h2> -->
+      <h1>
+        Taiwan<span>///</span><br>
+        Weather Map<br>
+      </h1>
+      <div v-if="targetCity" id="forecast">
+        <h5>{{targetCity}}</h5>
+        <div v-for="(weather, index) in targetWeather" :key="index">
+          {{weather.elementName}}
+          <div v-for="(item, index2) in weather.time" :key="index2">
+            {{item.startTime}}-{{item.endTime}}
+            {{item.parameter.parameterName}}{{item.parameter.parameterUnit}}
+          </div>
+        </div>
       </div>
     </div>
-    <TaiwanWeather @trigger="updateTargetLocation"/>
+    <TaiwanWeather @trigger="updateTargetCity"/>
+
+    <Weather 
+      :error="axioError"
+      :allData="axioAllData"
+    />
   </div>
-  <!-- <Weather 
-    :error="axioError"
-    :allData="axioAllData"
-  /> -->
 </template>
 
 <script>
@@ -39,7 +47,8 @@ export default {
         // 'locationName': ['宜蘭縣'],
         'elementName': ['Wx','MaxT','MinT','PoP']
       },
-      targetLocation: ""
+      targetCity: "",
+      targetWeather: []
     }
   },
   components: {
@@ -52,6 +61,7 @@ export default {
   },
   methods: {
     AxiosFunc(){
+      this.axioAllData = []
       //https://opendata.cwb.gov.tw/opendatadoc/MFC/ForecastElement.pdf
       //elementName可以篩選
       //官網上說是array[string]，但測試後發現他是以逗號隔開
@@ -68,8 +78,12 @@ export default {
         this.axioError = true
       })
     },
-    updateTargetLocation(target){
-      this.targetLocation = target
+    updateTargetCity(target){
+      const targetLocation = this.axioAllData.find(item => {
+        return item.locationName === target
+      })
+      this.targetCity = targetLocation? targetLocation.locationName: ''
+      this.targetWeather = targetLocation? targetLocation.weatherElement: []
     }
   }
 }
@@ -84,7 +98,7 @@ $bgColor: #222;
   display: flex;
   font-family: "Source Code Pro";
   letter-spacing: 4px;
-  width: 100vh;
+  width: 100%;
   height: calc(100vh - 10rem);
   padding: 1rem;
   color: $mainColor;
@@ -112,6 +126,11 @@ $bgColor: #222;
         transform: translate(-5px, -5px);
       }
     }
+  }
+  #WeatherList{
+    width: 60rem;
+    max-height: calc(100vh - 10rem);
+    overflow: scroll;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="WeatherList">
     <div v-if="error">
       Error
     </div>
