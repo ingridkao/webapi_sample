@@ -3,7 +3,10 @@
     msg="參考codepan範例，實作出氣象地圖"
     link="https://codepen.io/caocharles/pen/oNYZZEo"
   />
-  
+  <HelloWorld 
+    msg="天氣描述代碼表"
+    link="https://opendata.cwb.gov.tw/opendatadoc/MFC/ForecastElement.pdf"
+  />
   <div id="taiwanMapBox">
     <div class="title_area">
       <h1>
@@ -12,12 +15,22 @@
       </h1>
       <div v-if="targetCity" id="forecast">
         <h5>{{targetCity}}</h5>
-        <div v-for="(weather, index) in targetWeather" :key="index">
-          {{weather.elementName}}
-          <div v-for="(item, index2) in weather.time" :key="index2">
-            {{item.startTime}}-{{item.endTime}}
-            {{item.parameter.parameterName}}{{item.parameter.parameterUnit}}
+        <div class="periodBox">
+          <div v-for="hour in 3" :key="hour">
+            近{{hour*12}}小時
           </div>
+        </div>
+        <div 
+          v-for="(weather, index) in targetWeather" 
+          :key="index"
+          class="weatherBox"
+        >
+          <div 
+            v-for="(item, index2) in weather.time" 
+            :key="index2"
+            :class="weather.elementName"
+            v-html="translateWeather(weather.elementName, item.parameter)"
+          />
         </div>
       </div>
     </div>
@@ -84,6 +97,15 @@ export default {
       })
       this.targetCity = targetLocation? targetLocation.locationName: ''
       this.targetWeather = targetLocation? targetLocation.weatherElement: []
+    },
+    translateWeather(type, parameter){
+      const {parameterName, parameterValue, parameterUnit} = parameter
+      if(type === 'Wx'){
+        return `<div class="code${parameterValue}"></div>${parameterName}`
+      }else{
+        let Unit = (parameterUnit === '百分比')? '%': '°C'
+        return `${parameterName}${Unit}`
+      }
     }
   }
 }
@@ -106,6 +128,8 @@ $bgColor: #222;
   .title_area{
     position: relative;
     color: $mainColor;
+    width: 23rem;
+    flex: 1 0 23rem;
     h1{
       span {
           color: $minorColor;
@@ -113,24 +137,106 @@ $bgColor: #222;
     }
   }
   svg {
-    width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
     path {
-      height: 100vh;
-      fill: transparent;
       stroke: $mainColor;
-      transition: 0.5s;
-      cursor: pointer;
       &:hover {
         fill: $minorColor;
-        transform: translate(-5px, -5px);
       }
     }
+    g.active path{
+      fill: $minorColor;
+    }
   }
-  #WeatherList{
+  #WeatherContainer{
     width: 60rem;
+    flex: 1 1 60rem;
+
     max-height: calc(100vh - 10rem);
     overflow: scroll;
+  }
+}
+#forecast{
+  width: 100%;
+  >div{
+    display: inline-flex;
+    width: 100%;
+    >div{
+      flex: 1 1 7rem;
+    }
+  }
+  .periodBox{
+    font-size: .5rem;
+  }
+  .weatherBox{
+    >div{
+      &.Wx > div{
+        font-size: 3rem;
+        text-align: center;
+        &.code1:before{
+          content: '☀️';
+        }
+        &.code2:before{
+          content: '🌤️';
+        }
+        &.code3:before,
+        &.code4:before,
+        &.code5:before,
+        &.code6:before,
+        &.code7:before{
+          content: '☁️';
+        }
+        &.code8:before,
+        &.code9:before,
+        &.code10:before,
+        &.code11:before,
+        &.code12:before,
+        &.code13:before,
+        &.code14:before{
+          content: '🌧';
+        }
+        &.code15:before,
+        &.code16:before,
+        &.code17:before,
+        &.code18:before,
+        &.code22:before{
+          content: '⛈️';
+        }
+        &.code19:before,
+        &.code20:before,
+        &.code21:before{
+          content: '🌦';
+        }
+        &.code23:before{
+          content: '🌨';
+        }
+        &.code24:before,
+        &.code25:before,
+        &.code26:before,
+        &.code27:before{
+          content: '🌫';
+        }
+
+      }
+      &.PoP{
+        padding-left: .5rem;
+        &:before{
+          content: '💧';
+        }
+      }
+      &.MinT{
+        padding-left: .5rem;
+        &:before{
+          content: '🌡';
+        }
+      }
+      &.MaxT{
+        padding-left: 2rem;
+        &:before{
+          content: '↘';
+        }
+      }
+    }
   }
 }
 </style>

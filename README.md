@@ -67,4 +67,8 @@ npm run serve
     a. 可以將上一個頁面的Weather(觀測列表)放入WeatherView確認API串接方式
     b. 將API response的資料透過Array.find的function找到點擊的該縣市資料
     c. 將該縣市資料放在DIV#forecast中
+5. 將Weather.vue中的List排版（之後補上按鈕篩選時間區段功能)
+6. 把forecast中裡面的資料並浮誇一點，使用unicode
+7. 點擊的縣市，將SVG中的g tag設定active
+
 
